@@ -1,0 +1,6 @@
+#! /bin/bash
+xmessage "Content of clipboard:
+
+$(xclip -selection clipboard -o)
+$(xclip -selection primary -o)
+$(xclip -selection secondary -o)"

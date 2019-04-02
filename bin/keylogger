@@ -1,0 +1,7 @@
+#! /bin/bash
+Keyboardid="$(xinput | grep "AT Translated" | cut -d= -f2 | awk '{print $1}')"
+[ "$Keyboardid" ] || Keyboardid="$(xinput | grep "Xephyr virtual keyboard" | cut -d= -f2 | awk '{print $1}')"
+[ "$Keyboardid" ] || Keyboardid="$(xinput | grep "XKeyboard" | cut -d= -f2 | awk '{print $1}')"
+[ "$Keyboardid" ] || Keyboardid="$(xinput | grep "xwayland-keyboard" | cut -d= -f2 | awk '{print $1}')"
+[ "$Keyboardid" ] || Keyboardid="$(xinput | grep "XTEST keyboard" | cut -d= -f2 | awk '{print $1}')"
+xinput test $Keyboardid

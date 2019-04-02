@@ -1,0 +1,33 @@
+#! /usr/bin/kaptain
+start "x11docker container security check"  -> info mainframe bash @close="Exit";
+  info "Some tests to check possible container security and privacy leaks." -> "";
+
+  mainframe:framed -> gpu mouse keyboard windows container ;
+    gpu " GPU video memory" -> gpu_info gpu_buttons;
+      gpu_info "GPU drivers do not clean video memory when an application allocates it. This affects x11docker option --gpu. \n Former video content can be viewed and even survives a reboot. Compare:  https://hsmr.cc/palinopsia" -> "";
+      gpu_buttons:beside -> palinopsia;
+        palinopsia -> @fork("./bin/palinopsia 800 600 256")="View some GPU video memory (palinopsia leak). Scroll with arrow keys.";
+
+    mouse "Mouse events" -> mouse_info mouse_buttons;
+      mouse_info " Mouse movements and window mouse events are visible only within the parent X server. \n With option --hostdisplay all movements and events are visible." -> "";
+      mouse_buttons:beside -> xeyes xev;
+        xeyes      -> @fork("xeyes")="Watch mouse movement with xeyes";
+        xev        -> @fork("xterm -hold -e 'xev -root'")="Watch window events with xev";
+      
+    keyboard "Keyboard events" -> keyboard_info keyboard_buttons;
+      keyboard_info " Keylogging and remote host control is the most dangerous part in running container applications on X. \n x11docker option --hostdisplay along with --gpu or --clipboard allows it." -> "" ;
+      keyboard_buttons:beside -> xinput xkbwatch xdotool;
+        xinput     -> @fork("xterm -hold -e 'bin/keylogger'")="Run keylogger with xinput";
+        xkbwatch   -> @fork("xkbwatch")="Show state of switch keys with xkbwatch";
+        xdotool    -> @fork("bin/formatc")="Try to run a terminal on host with xdotool";
+      
+    windows "Application windows and clipboard" -> windows_buttons;
+      windows_buttons:beside -> xwininfo xclip;
+        xwininfo   -> @fork("bin/windowlist")="Show a list of accessable application windows with xwininfo";
+        xclip      -> @fork("bin/clipboard")="Show content of clipboard with xclip";
+      
+    container "Capabilities" -> container_buttons;
+      container_buttons:beside -> capsh;
+        capsh      -> @fork("bin/capcheck")="Check process capabilities";
+  
+    bash           -> @fork("xterm")="Run a bash terminal";
