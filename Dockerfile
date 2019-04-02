@@ -5,45 +5,52 @@
 FROM debian:jessie
 RUN apt-get update
 RUN apt-get install -y \
+    feh \
     kaptain \
     libcap2-bin \
+    libpulse0 \
+    alsa-utils \
     mesa-utils \
     mesa-utils-extra \
     mousepad \
-    procps \
-    psmisc \
+    pulseaudio \
+    vgrabbj \
     wmctrl \
     x11-apps \
     x11-xkb-utils \
     x11-utils \
     x11-xserver-utils \
+    xboard \
     xclip \
     xdotool \
+    xfce4-terminal \
     xinput \
     xterm \
     xrestop \
     xtrace \
-    xwit \
-    && \
-    chmod +s /sbin/capsh
+    xwit
 
-    RUN chmod u+s /sbin/capsh
+# install glxspheres
+RUN apt-get install -y wget && \
+    wget https://downloads.sourceforge.net/project/virtualgl/2.6.1/virtualgl_2.6.1_amd64.deb -O /opt/virtualgl.deb && \
+    cd /opt && dpkg -i ./virtualgl.deb && \
+    apt-get remove -y wget && apt-get autoremove -y
+ENV PATH=$PATH:/opt/VirtualGL/bin
+
+RUN mkdir -p /opt/bin
 
 # POC to read GPU VRAM
 # thanks to https://hsmr.cc/palinopsia/
-COPY bin /etc/skel/bin
+COPY palinopsia.cpp /opt/
 RUN apt-get install -y g++ libsdl2-dev libsdl2-2.0-0 && \
-    g++ /etc/skel/bin/palinopsia.cpp -std=c++11 `pkg-config --libs --cflags sdl2` -o /etc/skel/bin/palinopsia && \
+    g++ /opt/palinopsia.cpp -std=c++11 `pkg-config --libs --cflags sdl2` -o /opt/bin/palinopsia && \
     apt-get remove -y g++ libsdl2-dev && \
     apt-get -y autoremove
 
-RUN chmod +x /etc/skel/bin/*
+COPY bin/* /opt/bin/
+ENV PATH=$PATH:/opt/bin
 
-CMD kaptain ~/bin/containercheck.kaptn
+RUN chmod +x  /opt/bin/* ;\
+    chmod u+s /sbin/capsh
 
-
-#  wmctrl:\n\
-#$(wmctrl -m | nl)\n\
-#$(wmctrl -d)\n\
-#$(wmctrl -lp)\n\
-#  driinfo: $(xdriinfo) \n\
+CMD containercheck.kaptn
