@@ -1,0 +1,10 @@
+#! /bin/bash
+echo "ALSA: aplay -l"
+aplay -l
+echo
+while read Line; do
+  echo "speaker-test: $Line"
+  ALSA_CARD="$(echo "$Line" | cut -d: -f1 | cut -d' ' -f2)" speaker-test -l1
+  aplay /usr/share/games/xboard/sounds/gong.wav
+  echo
+done < <(LC_ALL=C aplay -l | grep card)
