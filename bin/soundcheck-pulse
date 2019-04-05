@@ -1,6 +1,8 @@
 #! /bin/bash
-echo "Pulseaudio: pactl info"
+# Sound check pulseaudio
+
+echo "Pulseaudio: $ pactl info"
 pactl info
 echo
-echo "paplay -v /usr/share/games/xboard/sounds/cymbal.wav"
+echo "$ paplay -v /usr/share/games/xboard/sounds/cymbal.wav"
 paplay -v /usr/share/games/xboard/sounds/cymbal.wav

@@ -1,6 +1,13 @@
 #! /bin/bash
-xmessage "Content of clipboard:
+# Show clipbard content
 
-$(xclip -selection clipboard -o)
-$(xclip -selection primary -o)
-$(xclip -selection secondary -o)"
+echo "$ xclip -selection clipboard -o"
+xclip -selection clipboard -o
+echo
+echo
+echo "$ xclip -selection primary -o"
+xclip -selection primary -o
+echo 
+echo
+echo "$ xclip -selection secondary -o"
+xclip -selection secondary -o

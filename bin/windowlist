@@ -1,10 +1,6 @@
 #! /bin/bash
-{
-  echo "Found application windows that can be manipulated."
-  echo "Extracted Window name list:"
-  xwininfo -root -children | grep -v 'has no name' | cut -d'"' -f2 | sort | uniq
-  echo "###########################"
-  echo "Full output of 'xwininfo -root -children':"
-  xwininfo -root -children
-} > currentwindowlist
-mousepad currentwindowlist
+echo "Extracted Window name list:"
+xwininfo -root -children | grep -v 'has no name' | cut -d'"' -f2 | sort | uniq
+echo "###########################"
+echo "Full output of 'xwininfo -root -children':"
+xwininfo -root -children

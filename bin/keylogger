@@ -1,4 +1,6 @@
 #! /bin/bash
+# Run a keylogger with xinput
+
 Keyboardid="$(xinput | grep "AT Translated" | cut -d= -f2 | awk '{print $1}')"
 [ "$Keyboardid" ] || Keyboardid="$(xinput | grep "Xephyr virtual keyboard" | cut -d= -f2 | awk '{print $1}')"
 [ "$Keyboardid" ] || Keyboardid="$(xinput | grep "XKeyboard" | cut -d= -f2 | awk '{print $1}')"

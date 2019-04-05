@@ -1,4 +1,6 @@
 #! /bin/bash
+# Sound check of all ALSA devices
+
 echo "ALSA: aplay -l"
 aplay -l
 echo

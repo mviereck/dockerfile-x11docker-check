@@ -2,18 +2,23 @@
 # 
 # Run several security and privacy checks in a docker container on X
 
-FROM debian:jessie
+FROM debian:buster
 RUN apt-get update
 RUN apt-get install -y \
+    cups-client \
+    curl \
     feh \
-    kaptain \
+    iptraf-ng \
     libcap2-bin \
     libpulse0 \
     alsa-utils \
     mesa-utils \
     mesa-utils-extra \
     mousepad \
+    net-tools \
+    psmisc \
     pulseaudio \
+    systemd-sysv \
     vgrabbj \
     wmctrl \
     x11-apps \
@@ -29,10 +34,12 @@ RUN apt-get install -y \
     xrestop \
     xtrace \
     xwit
+    
+RUN curl http://ftp.us.debian.org/debian/pool/main/k/kaptain/kaptain_0.73-2_amd64.deb -o /opt/kaptain.deb && \
+    cd /opt && apt-get install -y --no-install-recommends ./kaptain.deb
 
 # install glxspheres
-RUN apt-get install -y wget && \
-    wget https://downloads.sourceforge.net/project/virtualgl/2.6.1/virtualgl_2.6.1_amd64.deb -O /opt/virtualgl.deb && \
+RUN curl -L https://downloads.sourceforge.net/project/virtualgl/2.6.1/virtualgl_2.6.1_amd64.deb -o /opt/virtualgl.deb && \
     cd /opt && dpkg -i ./virtualgl.deb && \
     apt-get remove -y wget && apt-get autoremove -y
 ENV PATH=$PATH:/opt/VirtualGL/bin
@@ -50,7 +57,10 @@ RUN apt-get install -y g++ libsdl2-dev libsdl2-2.0-0 && \
 COPY bin/* /opt/bin/
 ENV PATH=$PATH:/opt/bin
 
+# Executeable scripts and some dirty SETUIDs
 RUN chmod +x  /opt/bin/* ;\
-    chmod u+s /sbin/capsh
-
+    chmod u+s /sbin/capsh ; \
+    chmod u+s /bin/netstat; \
+    chmod u+s /usr/sbin/iptraf-ng
+    
 CMD containercheck.kaptn
