@@ -4,7 +4,8 @@
 
 FROM debian:buster
 RUN apt-get update
-RUN apt-get install -y \
+RUN apt-get install -y --no-install-recommends \
+    ca-certificates \
     cups-client \
     curl \
     feh \
@@ -12,6 +13,11 @@ RUN apt-get install -y \
     libcap2-bin \
     libpulse0 \
     alsa-utils \
+    hardinfo \
+    hwinfo \
+    inxi \
+    locales \
+    lshw \
     mesa-utils \
     mesa-utils-extra \
     mousepad \

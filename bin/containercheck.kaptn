@@ -1,5 +1,5 @@
 #! /usr/bin/kaptain
-start "x11docker container security and feature check"  -> tabs buttonline ;
+start "x11docker feature and container isolation check"  -> tabs buttonline ;
 
   tabs:tabbed -> xserver gpu container features;
         
@@ -27,22 +27,23 @@ start "x11docker container security and feature check"  -> tabs buttonline ;
         glxspheres        -> @fork("xterm -hold -e glxspheres64")="Run glxspheres";
         glxinfo           -> @fork("xterm -hold -e 'glxinfo | grep OpenGL'")="Run glxinfo";
       
-    container:framed "Container capabilities" -> capabilities network ipc processes @fill;
+    container:framed "Container capabilities" -> capabilities network ipc processes;
       capabilities "Capabilities" -> capabilities_info capsh; 
         capabilities_info " Capabilities allow access to system resources for root user and suid applications. \n Regular user application should need none of them. \n Docker has a default set of allowed capabilties. x11docker drops them all in default setups. \n Your host is at risk if capabilities other than docker default are available." -> "";
         capsh             -> @fork("showoutput capcheck")="Check process capabilities";
-      network "Network" -> network_info netstat tulpen iptraf;
+      network "Network" -> network_info netstat iptraf;
         network_info      -> @text=" Network namespacing is a quite important part of container isolation. \n If you run with docker run option --network=host or x11docker option --hostnet, \n applications in container can access e.g. DBus on host and communicate with host applications.";
-        netstat           -> @fork("showoutput 'netstat'")="Show output of netstat";
-        tulpen            -> @fork("showoutput 'netstat -tulpen'")="Show output of netstat -tulpen";
+        netstat           -> @fork("showoutput 'networkinfo'")="Show some network information with netstat";
         iptraf            -> @fork("xterm -hold -e iptraf-ng")="Show network traffic with iptraf";
       ipc "IPC Shared memory" -> ipc_info lsipc;
-        ipc_info          -> @text=" Shared memory allows some interprocess communication and data exchange. \n Option --hostipc disables IPC namespacing. It is enabled if using --hostdisplay along with --gpu or --clipboard.";
+        ipc_info          -> @text=" Shared memory allows some interprocess communication and data exchange. \n x11docker option --hostipc disables IPC namespacing (docker run option --ipc=host). \n IPC namespacing is disabled if using --hostdisplay along with --gpu or --clipboard.";
         lsipc             -> @fork("showoutput showipc")="Show output of lsipc";
       processes "Processes" -> pstree;
         pstree            -> @fork("showoutput pstree")="Show process tree with pstree";
         
-    features:framed "Miscellaneous" -> sound webcam printer @fill;
+    features:framed "Hardware" -> hardware sound webcam printer @fill;
+      hardware "Hardware information" -> hardinfo;
+        hardinfo          -> @fork("hardinfo")="Hardware information with hardinfo";
       sound "Sound" -> sound_info soundalsa soundpulse;
         sound_info        -> @text=" Sound check for options --alsa and --pulsaudio";
         soundalsa         -> @fork("xterm -hold -e soundcheck-alsa")="Sound check ALSA";
@@ -52,6 +53,7 @@ start "x11docker container security and feature check"  -> tabs buttonline ;
         webcam_capture    -> @fork("xterm -hold -e 'vgrabbj -a -F 4 | feh - '")="Webcam capture";
       printer "Printer" -> lpstat;
         lpstat            -> @fork("showoutput 'lpstat -s'")="Show a list of printers provided by CUPS";
+        
         
     buttonline:beside -> bash @close="Exit";
       bash              -> @fork("xfce4-terminal")="Run a bash terminal";
