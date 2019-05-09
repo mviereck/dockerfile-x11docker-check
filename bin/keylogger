@@ -1,5 +1,9 @@
 #! /bin/bash
 # Run a keylogger with xinput
+echo "Running a keylogger with 'xinput test'."
+echo "In a well isolated case, keypresses should be visible only if container windows have focus, but not if host windows have focus."
+echo "If no keypresses are shown while pressing keys although a container window has focus, the check itself failed."
+echo ""
 
 Keyboardid="$(xinput | grep "AT Translated" | cut -d= -f2 | awk '{print $1}')"
 [ "$Keyboardid" ] || Keyboardid="$(xinput | grep "Xephyr virtual keyboard" | cut -d= -f2 | awk '{print $1}')"

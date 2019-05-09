@@ -12,7 +12,7 @@ start "x11docker feature and container isolation check"  -> tabs buttonline ;
         xinput            -> @fork("xterm -hold -e 'keylogger'")="Run keylogger with xinput";
         xdotool           -> @fork("xterm -hold -e formatc")="Try to run a terminal on host with xdotool";
       windows "Application windows" -> xwininfo xev;
-        xwininfo          -> @fork("showoutput windowlist")="Show a list of accessable application windows with xwininfo";
+        xwininfo          -> @fork("showoutput windowlist")="Show a list of accessible application windows with xwininfo";
         xev               -> @fork("xterm -hold -e 'xev -root'")="Watch window events with xev";
       clipboard "Clipboard" -> xclip;
         xclip             -> @fork("showoutput clipboard")="Show content of clipboard with xclip";
