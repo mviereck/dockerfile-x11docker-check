@@ -1,0 +1,8 @@
+#! /bin/bash
+# Show available IPC resources
+
+echo "$ lsipc -g"
+lsipc -g 2>&1
+echo
+echo "$ lsipc -m"
+lsipc -m 2>&1

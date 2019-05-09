@@ -1,0 +1,7 @@
+#! /bin/bash
+# Store output of command $@ in file $1.output
+
+Command="$@"
+Outputfile="$1.output"
+$Command > "$Outputfile" 2>&1
+mousepad "$Outputfile" 2>/dev/null

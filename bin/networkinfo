@@ -1,0 +1,31 @@
+#! /bin/bash
+# Some network information with netstat
+
+echo "$ netstat"
+netstat
+echo
+
+echo "######################"
+echo "$ netstat --route"
+netstat --route
+echo
+
+echo "######################"
+echo "$ netstat --interface"
+netstat --interface
+echo
+
+echo "######################"
+echo "$ netstat --statistics"
+netstat --statistics
+echo
+
+echo "######################"
+echo "$ netstat --masquerade"
+netstat --masquerade
+echo
+
+echo "######################"
+echo "$ netstat --groups"
+netstat --groups
+echo

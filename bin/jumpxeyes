@@ -1,0 +1,19 @@
+#! /bin/bash
+# xeyes jumps away if touched
+
+Xaxis=$(xdpyinfo | grep dimensions | cut -dx -f1 | rev | cut -d " " -f1 | rev)
+Yaxis=$(xdpyinfo | grep dimensions | cut -dx -f2 | cut -d " " -f1)
+Xaxis=$((Xaxis*8/10))
+Yaxis=$((Yaxis*8/10))
+Xoff=$((Xaxis/10))
+Yoff=$((Yaxis/10))
+
+xeyes &
+sleep 1
+Windowid=$(xdotool search --name xeyes | tail -n1)
+
+while : ; do
+  xdotool windowmove $Windowid $((Xoff + $RANDOM * $Xaxis / 32767)) $((Yoff + $RANDOM * $Yaxis / 32767)) || exit
+  sleep 0.05
+  xdotool behave $Windowid mouse-enter exec killall xdotool
+done
