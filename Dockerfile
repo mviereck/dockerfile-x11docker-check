@@ -15,6 +15,7 @@ RUN apt-get install -y --no-install-recommends \
     alsa-utils \
     hardinfo \
     hwinfo \
+    imvirt \
     inxi \
     locales \
     lshw \
