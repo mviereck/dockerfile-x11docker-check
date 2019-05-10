@@ -1,5 +1,9 @@
 #! /bin/bash
 # Sound check pulseaudio
+echo "Sound check for pulseaudio sound. (Option --pulseaudio)"
+echo "You should hear some noise."
+echo "Error messages indicate that no pulseaudio connection has been set up."
+echo ""
 
 echo "Pulseaudio: $ pactl info"
 pactl info

@@ -1,6 +1,11 @@
 #! /bin/bash
 # Sound check of all ALSA devices
 
+echo "Sound check for ALSA sound. (x11docker option --alsa)"
+echo "You should hear some noise."
+echo "Error messages indicate that no sound device files were shared."
+echo ""
+
 echo "ALSA: aplay -l"
 aplay -l
 echo

@@ -5,7 +5,7 @@ echo "Showing some netstat output to get informations on the current network."
 echo "In an isolated case, the output should be rather boring."
 echo "With disabled network namespacing there will be a big bunch of output."
 echo "x11docker option --hostnet or docker run option --network=host disable network namespacing."
-echo "Disabled network namespacing is a serious seurity leak."
+echo "Disabled network namespacing is a serious security leak."
 echo ""
 
 echo "$ netstat"

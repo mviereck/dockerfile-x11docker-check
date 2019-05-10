@@ -1,11 +1,16 @@
 #! /bin/bash
 # Try to run and control a terminal with xdotool
 
-echo "Trying to run a terminal on host sending keystrokes like ALT+F2 with xdotool."
-echo "This is only possible with x11docker option --hostdisplay along with --clipboard or --gpu."
-echo "The widespread solution to run GUI applications in Docker with just sharing /tmp/.X11-unix open a security leak here."
-echo "Error messages about missing XTEST extension indicate that the X server"
-echo "does not run with extension XTEST that would allow some X security leaks."
+echo "Trying to run a terminal on host sending keystrokes"
+echo "like ALT+F2 with xdotool."
+echo "This is only possible with x11docker option --hostdisplay along with"
+echo "--clipboard or --gpu."
+echo "The widespread solution to run GUI applications in Docker with"
+echo "just sharing /tmp/.X11-unix open a security leak here."
+echo "XTEST error messages indicate that remote host control with"
+echo "virtual key presses is not possible and the isolation works."
+echo "Some commands appearing in this terminal indicate that"
+echo "calling the apllication launcher with ALT+F2 failed."
 echo ""
 
 xdotool key alt+F2

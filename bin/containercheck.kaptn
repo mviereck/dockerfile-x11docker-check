@@ -50,9 +50,9 @@ start "x11docker feature and container isolation check"  -> tabs buttonline ;
         soundpulse        -> @fork("xterm -hold -e soundcheck-pulse")="Sound check Pulseaudio";
       webcam "Webcam" -> webcam_info webcam_capture;
         webcam_info       -> @text=" Webcam capture with option --webcam";
-        webcam_capture    -> @fork("xterm -hold -e 'vgrabbj -a -F 4 | feh - '")="Webcam capture";
+        webcam_capture    -> @fork("xterm -hold -e webcamcapture")="Webcam capture";
       printer "Printer" -> lpstat;
-        lpstat            -> @fork("showoutput 'lpstat -s'")="Show a list of printers provided by CUPS";
+        lpstat            -> @fork("showoutput printerlist")="Show a list of printers provided by CUPS";
         
         
     buttonline:beside -> bash @close="Exit";

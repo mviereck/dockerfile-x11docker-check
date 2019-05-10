@@ -3,7 +3,7 @@
 # Run several security and privacy checks in a docker container on X
 
 FROM debian:buster
-RUN apt-get update
+RUN apt-get   update
 RUN apt-get install -y --no-install-recommends \
     ca-certificates \
     cups-client \
