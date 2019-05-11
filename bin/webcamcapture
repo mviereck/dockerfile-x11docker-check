@@ -1,7 +1,12 @@
 #! /bin/bash
-echo "Trying to make a capture with your webcam. (x11docker option --webcam)."
-echo "Error message 'Can't open /dev/video0' indicates that the container"
-echo "cannot access the webcam device."
+echo "Trying to make a capture with your webcam. (x11docker option --webcam).
+
+Error message 'Can't open /dev/video0' indicates that the container
+cannot access the webcam device.
+"
+echo "***************************************************"
+echo ""
+echo "$ vgrabbj -a -F 4 | feh -"
 echo ""
 vgrabbj -a -F 4 | feh -
 

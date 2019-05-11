@@ -1,17 +1,26 @@
 #! /bin/bash
 # Sound check of all ALSA devices
 
-echo "Sound check for ALSA sound. (x11docker option --alsa)"
-echo "You should hear some noise."
-echo "Error messages indicate that no sound device files were shared."
-echo ""
+echo "Sound check for ALSA sound. (x11docker option --alsa)
 
-echo "ALSA: aplay -l"
+You should hear some noise.
+Error messages indicate that no sound device files were shared.
+Note that your machine might have multiple soundcards,
+but not all them might be connected to a speaker.
+"
+
+echo "***************************************************"
+echo "$ aplay -l"
 aplay -l
 echo
 while read Line; do
+  echo ""
+  echo "***************************************************"
+  export ALSA_CARD="$(echo "$Line" | cut -d: -f2 | cut -d' ' -f2)"
+  echo "ALSA_CARD=$ALSA_CARD"
   echo "speaker-test: $Line"
-  ALSA_CARD="$(echo "$Line" | cut -d: -f1 | cut -d' ' -f2)" speaker-test -l1
-  aplay /usr/share/games/xboard/sounds/gong.wav
-  echo
+  speaker-test -l1
+  aplay /usr/share/games/xboard/sounds/gong.wav && echo "
+  SUCCESS: Played sound with ALSA_CARD=$ALSA_CARD" || echo "
+  FAILED to play sound with ALSA_CARD=$ALSA_CARD"
 done < <(LC_ALL=C aplay -l | grep card)

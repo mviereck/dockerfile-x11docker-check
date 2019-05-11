@@ -3,5 +3,7 @@ echo "Showing a list of available CUPS printers with 'lpstat -s'"
 echo "(x11docker option --printer)."
 echo "Error messages indicate that no printer is available for the container."
 echo ""
-
+echo "***************************************************"
+echo "$ lpstat -s"
+echo ""
 lpstat -s

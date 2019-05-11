@@ -1,10 +1,18 @@
 #! /bin/bash
 # Run a keylogger with xinput
-echo "Running a keylogger with 'xinput test'."
-echo "In a well isolated case, keypresses should be visible only if container"
-echo "windows have focus, but not if host windows have focus."
-echo "If no keypresses are shown while pressing keys although"
-echo "a container window has focus, the check itself failed."
+echo "Running a keylogger with 'xinput test'.
+
+In a well isolated case, keypresses should be visible only if container
+windows have focus, but not if host windows have focus.
+
+If no keypresses are shown while pressing keys although
+a container window has focus, the check itself has failed.
+
+Message 'X Input extension not available' indicates the use of secured cookies.
+
+Press any keys in container windows and in host windows for checking.
+"
+echo "***************************************************"
 echo ""
 
 Keyboardid="$(xinput | grep "AT Translated" | cut -d= -f2 | awk '{print $1}')"

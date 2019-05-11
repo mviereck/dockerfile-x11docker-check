@@ -1,12 +1,15 @@
 #! /bin/bash
 # Show clipbard content
 
-echo "Showing the clipboard content of X server $DISPLAY"
-echo "If clipboard is shared e.g. with x11docker option --clipboard,"
-echo "you'll see the content of the host clipboard."
-echo "(Graphical clips are not regarded yes.)"
-echo ""
+echo "Showing the clipboard content of X server $DISPLAY with xclip.
 
+If clipboard is shared e.g. with x11docker option --clipboard,
+you'll see the content of the host clipboard.
+(Graphical clips are not regarded yet.)
+"
+
+echo "***************************************************"
+echo ""
 echo "$ xclip -selection clipboard -o"
 xclip -selection clipboard -o 2>/dev/null
 echo

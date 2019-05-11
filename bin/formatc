@@ -1,17 +1,21 @@
 #! /bin/bash
 # Try to run and control a terminal with xdotool
 
-echo "Trying to run a terminal on host sending keystrokes"
-echo "like ALT+F2 with xdotool."
-echo "This is only possible with x11docker option --hostdisplay along with"
-echo "--clipboard or --gpu."
-echo "The widespread solution to run GUI applications in Docker with"
-echo "just sharing /tmp/.X11-unix open a security leak here."
-echo "XTEST error messages indicate that remote host control with"
-echo "virtual key presses is not possible and the isolation works."
-echo "Some commands appearing in this terminal indicate that"
-echo "calling the apllication launcher with ALT+F2 failed."
-echo ""
+echo "Trying to run a terminal on host sending keystrokes
+like ALT+F2 and some terminal commands with xdotool.
+
+With x11docker this is only possible with option --hostdisplay
+along with --clipboard or --gpu.
+
+The widespread solution to run GUI applications in Docker with
+just sharing '/tmp/.X11-unix' opens a security leak here.
+
+XTEST error messages indicate that the container X server setup
+does not allow virtual key presses at all.
+"
+
+echo "***************************************************"
+set -x
 
 xdotool key alt+F2
 sleep 1

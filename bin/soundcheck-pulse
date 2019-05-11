@@ -1,12 +1,15 @@
 #! /bin/bash
 # Sound check pulseaudio
-echo "Sound check for pulseaudio sound. (Option --pulseaudio)"
-echo "You should hear some noise."
-echo "Error messages indicate that no pulseaudio connection has been set up."
-echo ""
+echo "Sound check for pulseaudio sound. (Option --pulseaudio)
 
-echo "Pulseaudio: $ pactl info"
+You should hear some noise.
+Error messages indicate that no pulseaudio connection has been set up.
+"
+
+echo "***************************************************"
+echo "$ pactl info"
 pactl info
-echo
+echo ""
+echo "***************************************************"
 echo "$ paplay -v /usr/share/games/xboard/sounds/cymbal.wav"
 paplay -v /usr/share/games/xboard/sounds/cymbal.wav

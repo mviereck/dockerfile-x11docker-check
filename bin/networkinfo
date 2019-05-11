@@ -1,38 +1,40 @@
 #! /bin/bash
 # Some network information with netstat
 
-echo "Showing some netstat output to get informations on the current network."
-echo "In an isolated case, the output should be rather boring."
-echo "With disabled network namespacing there will be a big bunch of output."
-echo "x11docker option --hostnet or docker run option --network=host disable network namespacing."
-echo "Disabled network namespacing is a serious security leak."
-echo ""
+echo "Showing some netstat output to get informations on the current network.
 
+In an isolated case, the output should be rather boring.
+With disabled network namespacing there will be a big bunch of output.
+x11docker option --hostnet or docker run option --network=host disable network namespacing.
+Disabled network namespacing is a serious security leak.
+"
+
+echo "***************************************************"
 echo "$ netstat"
 netstat
 echo
 
-echo "######################"
+echo "***************************************************"
 echo "$ netstat --route"
 netstat --route
 echo
 
-echo "######################"
+echo "***************************************************"
 echo "$ netstat --interface"
 netstat --interface
 echo
 
-echo "######################"
+echo "***************************************************"
 echo "$ netstat --statistics"
 netstat --statistics
 echo
 
-echo "######################"
+echo "***************************************************"
 echo "$ netstat --masquerade"
 netstat --masquerade
 echo
 
-echo "######################"
+echo "***************************************************"
 echo "$ netstat --groups"
 netstat --groups
 echo

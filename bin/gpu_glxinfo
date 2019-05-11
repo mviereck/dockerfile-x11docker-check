@@ -1,0 +1,14 @@
+#! /bin/bash
+echo "Showing GPU information with glxinfo. (x11docker option --gpu)
+"
+
+glxinfo > glxinfo.txt
+
+Renderer="$(grep "OpenGL renderer string"< glxinfo.txt)"
+grep -q -i "llvmpipe" <<< "$Renderer" && echo "GPU not accessible. Software rendering indicated with llvmpipe:" || echo "GPU seems to be accessible. Found GPU hardware:"
+echo "$Renderer"
+echo ""
+
+echo "***************************************************"
+echo ""
+cat glxinfo.txt | grep -i -E 'display|rendering|vendor|version|device|accelerated|memory|context|profile|renderer' | grep -v -E 'GL_|GLX_|extensions'

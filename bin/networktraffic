@@ -1,0 +1,15 @@
+#! /bin/bash
+
+echo "Showing some network traffic with iptraf-ng
+
+If iptraf-ng fails to start, your container is protected well
+with dropped linux capabilities and an unprivileged user. (x11docker default.)
+
+If you run x11docker with e.g. --sudouser or --cap-default, you'll see results.
+If you also run with option --hostnet, you can spy on the host network.
+
+**********************************************************************
+$ iptraf-ng
+"
+
+iptraf-ng

@@ -1,0 +1,12 @@
+#! /bin/bash
+
+echo "Watching window events with xev.
+
+If isolation works, you should only see events
+related to container windows or none at all.
+"
+
+echo "***************************************************"
+echo "$ xev -root"
+echo ""
+xev -root

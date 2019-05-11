@@ -1,11 +1,17 @@
 #! /bin/bash
-echo "Looking for accessible Windows with xwininfo."
-echo "You should see only Window names of container applications."
-echo "if you see Window names from host, the container might be able"
-echo "to access and manipulate them."
+echo "Looking for accessible application windows with xwininfo.
+
+You should see only window names of container applications.
+If you see Window names from host, the container might be able
+to access and manipulate them.
+"
+
+echo "***************************************************"
+echo "Roughly extracted window name list:"
 echo ""
-echo "Extracted Window name list:"
 xwininfo -root -children | grep -v 'has no name' | cut -d'"' -f2 | sort | uniq
-echo "###########################"
-echo "Full output of 'xwininfo -root -children':"
+echo ""
+echo "***************************************************"
+echo "$ xwininfo -root -children"
+echo ""
 xwininfo -root -children

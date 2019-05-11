@@ -1,8 +1,23 @@
 #! /bin/bash
 # Show available IPC resources
 
+echo "Showing resources of IPC (inter process communication and shared memory).
+
+In a well isolated case, not much should be visible here. 
+Especially 'lsipc -m' should have no entries or show container applications only.
+
+Normally docker containers run in their own IPC namespace.
+x11docker disables this with discouraged option --hostdisplay 
+along with --gpu or --clipboard to avoid graphic rendering glitches.
+
+If IPC namespacing is disabled, container applications might be able
+to manipulate host applications.
+"
+
+echo "***************************************************"
 echo "$ lsipc -g"
 lsipc -g 2>&1
 echo
+echo "***************************************************"
 echo "$ lsipc -m"
 lsipc -m 2>&1
