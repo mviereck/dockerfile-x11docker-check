@@ -6,11 +6,11 @@ echo "Showing container capabilities.
 Linux capabilities define what root is allowed to do.
 Compare 'man capabilities'.
 
-Docker allows a subset of capabilities per default.
+Docker allows a subset of capabilities by default.
 Note that capabilities setuid and setgid allow even unprivileged
 container users to gain root privileges.
 
-x11docker drops all capabilities per default and runs with an
+x11docker drops all capabilities by default and runs with an
 unprivileged container user.
 Additionally it sets docker run option --security-opt=no-new-privileges.
 

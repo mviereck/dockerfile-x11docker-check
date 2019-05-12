@@ -1,12 +1,17 @@
 #! /usr/bin/kaptain
 start "x11docker feature and container isolation check"  -> tabs buttonline ;
 
-  tabs:tabbed -> xserver gpu container features;
+  tabs:tabbed -> xserver container gpu hardware;
         
     xserver:framed "X server security check" -> xserver_info mouse keyboard windows clipboard;
-      xserver_info        -> @text=" Some checks for X security leaks. \n Most of interest for x11docker option --hostdisplay, especially along with --clipboard or --gpu. \n The common X + Docker setup with '-v /tmp/.X11-unix:/tmp/.X11-unix --env DISPLAY' is affected, too." ;
+      xserver_info         -> @text=" These tests allow to check some possible security leaks in an X display server.\n\
+ Most of them are of interest when x11docker option '--hostdisplay' is used, \n\
+ especially along with '--clipboard' or '--gpu'.\n\
+ \n\
+ The widespread setup to share host X server with a docker container \n\
+ through '-v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY' is affected, too.";
       mouse "Mouse events" -> mouse_info xeyes;
-        mouse_info        -> @text=" If isolation works, the eyes should follow the mouse only while it moves on container windows.";
+        mouse_info        -> @text=" If mouse cursor isolation works, the eyes should follow the mouse only if it moves across container Windows.";
         xeyes             -> @fork("jumpxeyes")="Watch mouse movement with xeyes";
       keyboard "Keyboard events and remote host control" -> keyboard_info xinput xdotool;
         keyboard_info " Keylogging and remote host control is the most dangerous part in running container applications on X." -> "" ;
@@ -18,34 +23,51 @@ start "x11docker feature and container isolation check"  -> tabs buttonline ;
       clipboard "Clipboard" -> xclip;
         xclip             -> @fork("showoutput clipboard")="Show content of clipboard with xclip";
 
-    gpu:framed " GPU video memory leak" -> windows_info palinopsia glx @fill;
+    gpu:framed " GPU check" -> windows_info palinopsia glx @fill;
       windows_info        -> @text="Note: On MS Windows along with option --gpu these checks can cause the X server to freeze, especially with NVIDIA.";
       palinopsia "Palinopsia leak" -> palinopsia_info palinopsia_button;
-        palinopsia_info   -> @text=" GPU drivers do not clean the video memory when an application allocates it. \n This affects x11docker option --gpu. \n Former sensitive video content like letters or 'pron' can be viewed and even survives a reboot. \n This is a privacy leak. \n Compare:  https://hsmr.cc/palinopsia \n Error messages or all black window content across scrolled view indicate that the video memory is not leaked.";
+        palinopsia_info    -> @text=" With x11docker option --gpu, a privacy leak is possible which allows former sensitive video content \n\
+ (e.g. letters or 'pron') to be viewed. The content even survives a reboot. \n\
+ This is because some or all GPU drivers do not clean the video memory after an application allocates it. \n\
+ For more information see https://hsmr.cc/palinopsia. \n\
+ Error messages or all black window content accross scrolled view indicate that the video memory is not leaked.";
         palinopsia_button -> @fork("xterm -hold -e 'palinopsia 800 600 256'")="View some GPU video memory (palinopsia leak). Scroll with arrow keys.";
       glx "Hardware acceleration checks" -> glx_info glxgears glxspheres glxinfo;
-        glx_info          -> @text="Check whether hardware acceleration works. \n glxgears and glxspheres should show a frame rate matching your monitor, mostly about 60 frames/second. \n glxinfo should show your video card name. If the renderer string contains 'llvmpipe', software rendering is used." ;
+        glx_info          -> @text="Check whether hardware acceleration works. \n\
+ glxgears and glxspheres should show a frame rate matching your monitor, mostly about 60 frames/second. \n\
+ glxinfo should show your video card name. If the renderer string contains 'llvmpipe', software rendering is used." ;
         glxgears          -> @fork("xterm -hold -e 'glxgears -info | grep -v EXTENSIONS'")="Run glxgears";
         glxspheres        -> @fork("xterm -hold -e glxspheres64")="Run glxspheres";
         glxinfo           -> @fork("showoutput gpu_glxinfo")="Show glxinfo excerpt";
       
     container:framed "Container capabilities" -> capabilities network ipc processes;
       capabilities "Capabilities" -> capabilities_info capsh; 
-        capabilities_info " Capabilities allow access to system resources for root user and suid applications. \n Regular user application should need none of them. \n Docker has a default set of allowed capabilties. x11docker drops them all in default setups. \n Your host is at risk if capabilities other than docker default are available." -> "";
+        capabilities_info " Capabilities allow access to system resources for root user and suid applications. \n\
+ Regular user application should need none of them. \n\
+ Docker has a default set of allowed capabilties. x11docker drops them all in default setups. \n\
+ Your host is at risk if capabilities other than docker default are available." -> "";
         capsh             -> @fork("showoutput capcheck")="Check process capabilities";
       network "Network" -> network_info netstat iptraf;
-        network_info      -> @text=" Network namespacing is a quite important part of container isolation. \n If you run with docker run option --network=host or x11docker option --hostnet, \n applications in container can access e.g. DBus on host and communicate with host applications, \n and can spy on and manipulate host network in general.";
+        network_info      -> @text=" Network namespacing is a quite important part of container isolation. \n\
+ If you run with docker run option --network=host or x11docker option --hostnet, \n\
+ applications in container can access e.g. DBus on host and communicate with host applications, \n\
+ and can spy on and manipulate host network in general.";
         netstat           -> @fork("showoutput 'networkinfo'")="Show some network information with netstat";
         iptraf            -> @fork("xterm -hold -e networktraffic")="Show network traffic with iptraf";
       ipc "IPC Shared memory" -> ipc_info lsipc;
-        ipc_info          -> @text=" Shared memory allows some interprocess communication and data exchange. \n x11docker option --hostipc disables IPC namespacing (docker run option --ipc=host). \n IPC namespacing is disabled if using --hostdisplay along with --gpu or --clipboard.";
+        ipc_info          -> @text=" Shared memory allows some interprocess communication and data exchange. \n\
+ x11docker option --hostipc disables IPC namespacing (docker run option --ipc=host). \n\
+ IPC namespacing is disabled if using --hostdisplay along with --gpu or --clipboard.";
         lsipc             -> @fork("showoutput showipc")="Show output of lsipc";
       processes "Processes" -> pstree_info pstree;
         pstree_info       -> @text=" The process tree should show container applications only.";
         pstree            -> @fork("showoutput pstree -p")="Show process tree with pstree";
         
-    features:framed "Hardware" -> hardware sound webcam printer @fill;
-      hardware "Hardware information" -> windows_info2 hardinfo;
+    hardware:framed "Hardware" -> hardware_info hardware_hardinfo sound webcam printer @fill;
+      hardware_info       -> @text=" In general, containers do not have access to the hardware from host.\n\
+ However, it is possible to share hardware device files with a container to allow e.g. access to webcam or sound devices.\n\
+ Hardware that is not accessible by shared device files can be visible nonetheless through some kernel information.";
+      hardware_hardinfo "Hardware information" -> windows_info2 hardinfo;
         windows_info2     -> @text="Note: On MS Windows along with option --gpu this check can cause the X server to freeze, especially with NVIDIA.";
         hardinfo          -> @fork("hardinfo")="Hardware information with hardinfo";
       sound "Sound" -> sound_info soundalsa soundpulse;

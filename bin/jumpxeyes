@@ -12,6 +12,11 @@ xeyes &
 sleep 1
 Windowid=$(xdotool search --name xeyes | tail -n1)
 
+[ "$Windowid" ] || { 
+  echo "Failed to get window id from xeyes."
+  exit 1
+}
+
 while : ; do
   xdotool windowmove $Windowid $((Xoff + $RANDOM * $Xaxis / 32767)) $((Yoff + $RANDOM * $Yaxis / 32767)) || exit
   sleep 0.05

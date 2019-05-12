@@ -12,9 +12,16 @@ just sharing '/tmp/.X11-unix' opens a security leak here.
 
 XTEST error messages indicate that the container X server setup
 does not allow virtual key presses at all.
+
+If you run with x11docker option --xpra, --xdummy or --xvfb,
+you will see the keytrokes in this terminal, but they are harmless
+and captured by this X server $DISPLAY.
 "
 
 echo "***************************************************"
+
+xdotool key space 2>&1 | grep 'XTEST' && exit 1
+
 set -x
 
 xdotool key alt+F2
