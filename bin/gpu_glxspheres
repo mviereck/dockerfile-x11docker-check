@@ -1,0 +1,11 @@
+#! /bin/bash
+echo "Running glxspheres64.
+
+If GPU acceleration works, the frame rate should
+approximately match your monitor's framerate, mostly about 60 fps.
+"
+
+echo "***************************************************"
+echo ""
+
+glxspheres64

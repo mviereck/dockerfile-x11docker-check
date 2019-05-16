@@ -24,7 +24,8 @@ start "x11docker feature and container isolation check"  -> tabs buttonline ;
         xclip             -> @fork("showoutput clipboard")="Show content of clipboard with xclip";
 
     gpu:framed " GPU check" -> windows_info palinopsia glx @fill;
-      windows_info        -> @text="Note: On MS Windows along with option --gpu these checks can cause the X server to freeze, especially with NVIDIA.";
+      windows_info        -> @text=" Note: On MS Windows along with option --gpu and X server VcXsrv (option -vcxsrv) \n\
+ these checks can cause the X server to freeze if you have an NVIDIA card. Alternatively, try --xwin in Cygwin.";
       palinopsia "Palinopsia leak" -> palinopsia_info palinopsia_button;
         palinopsia_info    -> @text=" With x11docker option --gpu, a privacy leak is possible which allows former sensitive video content \n\
  (e.g. letters or 'pron') to be viewed. The content even survives a reboot. \n\
@@ -36,9 +37,9 @@ start "x11docker feature and container isolation check"  -> tabs buttonline ;
         glx_info          -> @text="Check whether hardware acceleration works. \n\
  glxgears and glxspheres should show a frame rate matching your monitor, mostly about 60 frames/second. \n\
  glxinfo should show your video card name. If the renderer string contains 'llvmpipe', software rendering is used." ;
-        glxgears          -> @fork("xterm -hold -e 'glxgears -info | grep -v EXTENSIONS'")="Run glxgears";
-        glxspheres        -> @fork("xterm -hold -e glxspheres64")="Run glxspheres";
-        glxinfo           -> @fork("showoutput gpu_glxinfo")="Show glxinfo excerpt";
+        glxgears          -> @fork("xterm -hold -e gpu_glxgears")="Run glxgears";
+        glxspheres        -> @fork("xterm -hold -e gpu_glxspheres")="Run glxspheres64";
+        glxinfo           -> @fork("showoutput gpu_glxinfo")="Show some GPU information with glxinfo";
       
     container:framed "Container capabilities" -> capabilities network ipc processes;
       capabilities "Capabilities" -> capabilities_info capsh; 
@@ -52,7 +53,7 @@ start "x11docker feature and container isolation check"  -> tabs buttonline ;
  If you run with docker run option --network=host or x11docker option --hostnet, \n\
  applications in container can access e.g. DBus on host and communicate with host applications, \n\
  and can spy on and manipulate host network in general.";
-        netstat           -> @fork("showoutput 'networkinfo'")="Show some network information with netstat";
+        netstat:beside    -> @fork("showoutput 'networkinfo'")="Show some network information with netstat" @text="(Can take a few seconds on MS Windows.)";
         iptraf            -> @fork("xterm -hold -e networktraffic")="Show network traffic with iptraf";
       ipc "IPC Shared memory" -> ipc_info lsipc;
         ipc_info          -> @text=" Shared memory allows some interprocess communication and data exchange. \n\
@@ -68,12 +69,13 @@ start "x11docker feature and container isolation check"  -> tabs buttonline ;
  However, it is possible to share hardware device files with a container to allow e.g. access to webcam or sound devices.\n\
  Hardware that is not accessible by shared device files can be visible nonetheless through some kernel information.";
       hardware_hardinfo "Hardware information" -> windows_info2 hardinfo;
-        windows_info2     -> @text="Note: On MS Windows along with option --gpu this check can cause the X server to freeze, especially with NVIDIA.";
+        windows_info2     -> @text="Note: On MS Windows along with options --gpu --vcxsrv this check can cause the X server to freeze with NVIDIA cards.";
         hardinfo          -> @fork("hardinfo")="Hardware information with hardinfo";
-      sound "Sound" -> sound_info soundalsa soundpulse;
+      sound "Sound" -> sound_info soundalsa soundpulse pavucontrol;
         sound_info        -> @text=" Sound check for options --alsa and --pulsaudio";
         soundalsa         -> @fork("xterm -hold -e soundcheck-alsa")="Sound check ALSA";
         soundpulse        -> @fork("xterm -hold -e soundcheck-pulse")="Sound check Pulseaudio";
+        pavucontrol:beside-> @fork("xterm -hold -e pavucontrol")="Pulseaudio volume control (pavucontrol)" @text="If pulseaudio connection works, you should see some sliders.";
       webcam "Webcam" -> webcam_info webcam_capture;
         webcam_info       -> @text=" Webcam capture with option --webcam";
         webcam_capture    -> @fork("xterm -hold -e webcamcapture")="Webcam capture";

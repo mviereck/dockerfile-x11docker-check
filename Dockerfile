@@ -23,6 +23,7 @@ RUN apt-get install -y --no-install-recommends \
     mesa-utils-extra \
     mousepad \
     net-tools \
+    pavucontrol \
     psmisc \
     pulseaudio \
     systemd-sysv \
