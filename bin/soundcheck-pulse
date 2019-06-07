@@ -2,8 +2,10 @@
 # Sound check pulseaudio
 echo "Sound check for pulseaudio sound. (Option --pulseaudio)
 
-You should hear some noise.
+You should hear a cymbal sound.
 Error messages indicate that no pulseaudio connection has been set up.
+If no error message appears, but you hear no sound,
+check with pavucontrol whether the volume is muted.
 "
 
 echo "***************************************************"
