@@ -1,6 +1,4 @@
 # x11docker/check
-[![DockerHub](http://joss.theoj.org/papers/10.21105/joss.01349/status.svg)](https://doi.org/10.21105/joss.01349)
-
 [x11docker](https://github.com/mviereck/x11docker) container isolation and feature check.
 
 Provides a GUI with several buttons to check out container capabilities and possible X security leaks.
