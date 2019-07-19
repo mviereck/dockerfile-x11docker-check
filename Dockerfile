@@ -16,6 +16,7 @@ RUN apt-get install -y --no-install-recommends \
     hardinfo \
     hwinfo \
     imvirt \
+    intel-gpu-tools \
     inxi \
     locales \
     lshw \
@@ -27,6 +28,7 @@ RUN apt-get install -y --no-install-recommends \
     psmisc \
     pulseaudio \
     systemd-sysv \
+    vainfo \
     vgrabbj \
     wmctrl \
     x11-apps \
