@@ -34,7 +34,7 @@ xdotool type "echo Hello Host!"
 sleep 1
 xdotool key Return
 sleep 1
-xdotool type "echo format C:"
+xdotool type "echo forma_t C:"
 sleep 1
 xdotool key Return
 sleep 1
