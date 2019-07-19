@@ -3,7 +3,7 @@
 # Run several security and privacy checks in a docker container on X
 
 FROM debian:buster
-RUN apt-get   update
+RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     ca-certificates \
     cups-client \
@@ -66,6 +66,8 @@ RUN apt-get install -y g++ libsdl2-dev libsdl2-2.0-0 && \
 
 COPY bin/* /opt/bin/
 ENV PATH=$PATH:/opt/bin
+
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y xserver-xorg-video-all
 
 # Executeable scripts and some dirty SETUIDs
 RUN chmod +x  /opt/bin/* ;\
