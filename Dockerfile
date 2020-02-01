@@ -4,7 +4,7 @@
 
 FROM debian:buster
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     ca-certificates \
     cups-client \
     curl \
@@ -46,12 +46,14 @@ RUN apt-get install -y --no-install-recommends \
     xwit
     
 RUN curl http://ftp.us.debian.org/debian/pool/main/k/kaptain/kaptain_0.73-2_amd64.deb -o /opt/kaptain.deb && \
-    cd /opt && apt-get install -y --no-install-recommends ./kaptain.deb
+    cd /opt && \
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ./kaptain.deb
 
 # install glxspheres
 RUN curl -L https://downloads.sourceforge.net/project/virtualgl/2.6.1/virtualgl_2.6.1_amd64.deb -o /opt/virtualgl.deb && \
     cd /opt && dpkg -i ./virtualgl.deb && \
-    apt-get remove -y wget && apt-get autoremove -y
+    env DEBIAN_FRONTEND=noninteractive apt-get remove -y wget && \
+    env DEBIAN_FRONTEND=noninteractive apt-get autoremove -y
 ENV PATH=$PATH:/opt/VirtualGL/bin
 
 RUN mkdir -p /opt/bin
@@ -59,10 +61,10 @@ RUN mkdir -p /opt/bin
 # POC to read GPU VRAM
 # thanks to https://hsmr.cc/palinopsia/
 COPY palinopsia.cpp /opt/
-RUN apt-get install -y g++ libsdl2-dev libsdl2-2.0-0 && \
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y g++ libsdl2-dev libsdl2-2.0-0 && \
     g++ /opt/palinopsia.cpp -std=c++11 `pkg-config --libs --cflags sdl2` -o /opt/bin/palinopsia && \
-    apt-get remove -y g++ libsdl2-dev && \
-    apt-get -y autoremove
+    env DEBIAN_FRONTEND=noninteractive apt-get remove -y g++ libsdl2-dev && \
+    env DEBIAN_FRONTEND=noninteractive apt-get -y autoremove
 
 COPY bin/* /opt/bin/
 ENV PATH=$PATH:/opt/bin
