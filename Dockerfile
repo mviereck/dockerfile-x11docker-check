@@ -2,7 +2,7 @@
 # 
 # Run several security and privacy checks in a docker container on X
 
-FROM debian:buster
+FROM debian:bullseye
 RUN apt-get update
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -27,6 +27,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommend
     pavucontrol \
     psmisc \
     pulseaudio \
+    sudo \
     systemd-sysv \
     vainfo \
     vgrabbj \
