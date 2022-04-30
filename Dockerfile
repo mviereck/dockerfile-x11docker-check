@@ -2,9 +2,10 @@
 # 
 # Run several security and privacy checks in a docker container on X
 
-FROM debian:bullseye
+FROM debian:buster
 RUN apt-get update
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    acl \
     ca-certificates \
     cups-client \
     curl \
@@ -18,6 +19,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommend
     imvirt \
     intel-gpu-tools \
     inxi \
+    libnotify-bin \
     locales \
     lshw \
     mesa-utils \
@@ -57,6 +59,11 @@ RUN curl -L https://downloads.sourceforge.net/project/virtualgl/2.6.1/virtualgl_
     env DEBIAN_FRONTEND=noninteractive apt-get autoremove -y
 ENV PATH=$PATH:/opt/VirtualGL/bin
 
+
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y xserver-xorg-video-all
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends vdpau-driver-all vdpauinfo va-driver-all
+
+
 RUN mkdir -p /opt/bin
 
 # POC to read GPU VRAM
@@ -70,12 +77,10 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y g++ libsdl2-dev libsdl
 COPY bin/* /opt/bin/
 ENV PATH=$PATH:/opt/bin
 
-RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y xserver-xorg-video-all
-
 # Executeable scripts and some dirty SETUIDs
 RUN chmod +x  /opt/bin/* ;\
     chmod u+s /sbin/capsh ; \
     chmod u+s /bin/netstat; \
     chmod u+s /usr/sbin/iptraf-ng
     
-CMD containercheck.kaptn
+CMD startup_check
